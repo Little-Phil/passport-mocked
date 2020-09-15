@@ -31,7 +31,13 @@ module.exports = function (passport, util) {
         this.__proto__ && delete this.__proto__._error;
         this.fail(error, 401);
       } else {
-        var verified = function (e, d) { this.success(d); }.bind(this);
+        var verified = function (e, d) {
+          if (e) {
+            this.error(e);
+          } else {
+            this.success(d);
+          }
+        }.bind(this);
 
         var token_set = clone(this._token_response || {});
         var profile = this._profile || {};
